@@ -1,4 +1,4 @@
-from .base import *  # noqa
+from .base import *
 
 DEBUG = False
 SESSION_COOKIE_SECURE = True

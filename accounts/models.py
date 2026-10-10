@@ -54,7 +54,6 @@ class TechnicianManager(UserManager):
 
 
 class Technician(User):
-    """Proxy model so admins get a dedicated Technicians section."""
     objects = TechnicianManager()
 
     class Meta:

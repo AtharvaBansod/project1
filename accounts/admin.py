@@ -20,7 +20,6 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Technician)
 class TechnicianAdmin(UserAdmin):
-    """Add and manage technician accounts (Admin > Technicians > Add)."""
     list_display = ("username", "first_name", "last_name", "email", "phone", "is_active")
     list_filter = ("is_active",)
     fieldsets = (

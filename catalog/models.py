@@ -121,7 +121,6 @@ class Document(models.Model):
 
     @property
     def is_public(self):
-        """Datasheets are public; manuals require a signed-in user."""
         return self.doc_type == self.DocType.DATASHEET
 
     def __str__(self):

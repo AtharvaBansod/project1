@@ -1,5 +1,4 @@
-/* IndustroLink theme: flat, classic corporate look on top of Bootstrap 5.
-   Change the colours in :root to re-theme the whole site. */
+/* theme colours */
 :root {
   --brand: #1f4e79;
   --brand-dark: #173a5c;
@@ -30,12 +29,12 @@ h1, h2, h3, h4, h5, h6 { font-weight: 600; color: #222; }
 .bg-primary-soft { background: var(--brand-light); }
 .badge { border-radius: 4px; font-weight: 500; }
 
-/* Cards: flat with a plain border */
+/* Cards */
 .card { background: #fff; border: 1px solid #dde1e6; border-radius: 8px; box-shadow: var(--soft-shadow); }
 .card-hover:hover { border-color: #b7c4d1; box-shadow: 0 3px 8px rgba(20, 35, 50, .12); }
 .card-hover { transition: border-color .15s, box-shadow .15s; }
 
-/* Header: dark bar, white links */
+/* Header */
 .site-header { background: var(--brand); border-bottom: 1px solid var(--brand-dark); }
 .site-header .navbar-brand { color: #fff; font-weight: 600; }
 .site-header .nav-link { color: #dbe6f0; font-weight: 500; padding: .5rem .85rem !important; margin: .65rem .1rem; border-radius: 6px; }
@@ -71,7 +70,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: 600; color: #222; }
 .form-control:focus, .form-select:focus { border-color: var(--brand); box-shadow: 0 0 0 .15rem rgba(31, 78, 121, .2); }
 .form-label { font-size: .9rem; }
 
-/* Tabs / pills as flat tabs */
+/* Tabs */
 .nav-pills .nav-link { color: #444; border: 1px solid #d9dde2; background: #fff; border-radius: 6px; margin-right: 4px; }
 .nav-pills .nav-link:hover { background: var(--brand-light); }
 .nav-pills .nav-link.active { background: var(--brand); border-color: var(--brand); color: #fff; }
@@ -92,7 +91,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: 600; color: #222; }
 /* Error pages */
 .error-code { font-size: 5rem; font-weight: 700; line-height: 1; color: var(--brand); }
 
-/* Home hero with photo background */
+/* Home hero */
 .hero-photo {
   background:
     linear-gradient(90deg, rgba(14, 28, 44, .88) 0%, rgba(14, 28, 44, .68) 40%, rgba(14, 28, 44, .15) 100%),

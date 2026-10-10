@@ -89,7 +89,6 @@ EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 SITE_NAME = "IndustroLink"
 
-# Default users and demo catalog are created automatically after `migrate`
-# (only missing records are created; existing data is never overwritten).
+# seed default users and sample data after migrate
 SEED_ON_MIGRATE = os.environ.get("SEED_ON_MIGRATE", "True").lower() == "true"
 SEED_PASSWORD = os.environ.get("SEED_PASSWORD", "password@123")

@@ -7,7 +7,6 @@ from core.models import FAQ, TeamMember
 
 
 def tiny_pdf(title):
-    """Build a minimal valid one-page PDF containing the title."""
     text = title.replace("(", "").replace(")", "")
     stream = f"BT /F1 20 Tf 60 740 Td ({text}) Tj ET"
     objs = [
@@ -40,7 +39,6 @@ CATEGORIES = [
 ]
 BRANDS = [("Haas-Tek", "USA"), ("Kraftwerk", "Germany"), ("Sumida", "Japan"), ("Nordpump", "Sweden"), ("TianGong", "China")]
 
-# kind, name, sku, brand, category, summary, price, stock, qty, lead, featured, specs
 PRODUCTS = [
     ("machine", "VMC-850 Vertical Machining Centre", "HT-VMC850", "Haas-Tek", "CNC & Machining",
      "3-axis vertical machining centre with 24-tool changer.", 48500, "in_stock", 3, 0, True,

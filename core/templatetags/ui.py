@@ -5,7 +5,6 @@ register = template.Library()
 
 @register.filter
 def bs(field):
-    """Render a form field with Bootstrap classes."""
     widget = field.field.widget
     name = widget.__class__.__name__
     if name in ("Select", "SelectMultiple"):

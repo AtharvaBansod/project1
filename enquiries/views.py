@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
@@ -48,7 +47,6 @@ def enquiry_create(request):
 
 
 def enquiry_success(request, reference):
-    # The confirmation page shows only the reference and enquiry type, no personal data.
     enq = get_object_or_404(Enquiry, reference=reference)
     return render(request, "enquiries/success.html", {"enquiry": enq})
 

@@ -5,7 +5,6 @@ from .models import Enquiry
 
 @admin.register(Enquiry)
 class EnquiryAdmin(admin.ModelAdmin):
-    """Enquiry inbox: review, respond and upload quotations."""
     list_display = ("reference", "enquiry_type", "name", "company", "product", "status", "created_at")
     list_filter = ("status", "enquiry_type")
     list_editable = ("status",)
