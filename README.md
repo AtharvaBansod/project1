@@ -10,8 +10,6 @@ Django project (Django 5.2, SQLite, Bootstrap 5 via CDN).
 
 ## Installation
 
-Windows (PowerShell):
-
     git clone https://github.com/AtharvaBansod/project1.git
     cd project1
     python -m venv venv
@@ -19,16 +17,6 @@ Windows (PowerShell):
     pip install -r requirements.txt
     copy .env.example .env
     python manage.py migrate
-
-Linux / macOS:
-
-    git clone https://github.com/AtharvaBansod/project1.git
-    cd project1
-    python3 -m venv venv
-    source venv/bin/activate
-    pip install -r requirements.txt
-    cp .env.example .env
-    python3 manage.py migrate
 
 `migrate` creates the database and automatically creates the default users and
 sample data listed below. Running it again does not duplicate anything.
