@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<section class="page-header py-5 mt-n3"><div class="container">
+  <h1 class="fw-bold">About IndustroLink</h1>
+  <p class="lead text-muted col-lg-8">We import industrial machines, tools and spare parts and make buying them simple: clear datasheets, honest availability and local installation support.</p>
+</div></section>
+<section class="container py-5">
+  <h2 class="h4 mb-3">About us</h2>
+  <div class="row g-4">
+    <div class="col-lg-7"><p>Founded by engineers who spent years sourcing equipment for factories, IndustroLink connects industrial buyers with trusted manufacturers abroad. We verify every product listing, keep technical documents in one place and manage the import process end to end.</p>
+      <p>Our catalog covers CNC and packaging machinery, compressors, pumps and a deep range of compatible spare parts.</p></div>
+    <div class="col-lg-5"><div class="card p-4"><div class="row text-center">
+      <div class="col"><div class="stat-number">12+</div><small class="text-muted">Years</small></div>
+      <div class="col"><div class="stat-number">300+</div><small class="text-muted">Buyers</small></div>
+      <div class="col"><div class="stat-number">15</div><small class="text-muted">Countries</small></div></div></div></div>
+  </div>
+</section>
+<section class="container pb-5">
+  <h2 class="h4 mb-3">How it works</h2>
+  <div class="row g-3">
+    {% for icon, title, text in steps %}
+    <div class="col-md-6 col-lg-3"><div class="card p-4 h-100"><span class="icon-circle mb-3"><i class="bi {{ icon }}"></i></span>
+      <h3 class="h6">{{ forloop.counter }}. {{ title }}</h3><p class="small text-muted mb-0">{{ text }}</p></div></div>
+    {% endfor %}
+  </div>
+</section>
+<section class="container pb-3">
+  <h2 class="h4 mb-3">Team</h2>
+  <div class="row g-3">
+    {% for m in team %}
+    <div class="col-sm-6 col-lg-3"><div class="card p-4 text-center h-100"><span class="icon-circle mx-auto mb-3"><i class="bi bi-person"></i></span>
+      <div class="fw-semibold">{{ m.name }}</div><div class="small text-primary">{{ m.role }}</div><p class="small text-muted mt-2 mb-0">{{ m.bio }}</p></div></div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

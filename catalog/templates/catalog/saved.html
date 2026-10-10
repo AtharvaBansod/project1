@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Saved products{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="h3 mb-4">Saved products</h1>
+  <div class="row g-4">
+    {% for item in items %}
+    <div class="col-md-6 col-lg-4">
+      {% include "catalog/_card.html" with product=item.product %}
+      <form method="post" action="{% url 'catalog:toggle_save' item.product.slug %}" class="mt-2">{% csrf_token %}
+        <input type="hidden" name="next" value="{% url 'catalog:saved' %}">
+        <button class="btn btn-sm btn-link text-danger">Remove</button></form>
+    </div>
+    {% empty %}<div class="col-12"><div class="card p-5 text-center text-muted">Nothing saved yet. <a href="{% url 'catalog:list' %}">Browse products</a>.</div></div>{% endfor %}
+  </div>
+</div>
+{% endblock %}

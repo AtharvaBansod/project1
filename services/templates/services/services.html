@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Services{% endblock %}
+{% block content %}
+<section class="page-header py-5 mt-n3"><div class="container">
+  <h1 class="fw-bold">Services</h1><p class="lead text-muted col-lg-8">From the day your machine arrives to the day your team runs it confidently.</p>
+</div></section>
+<div class="container py-5"><div class="row g-4">
+  {% for s in services %}
+  <div class="col-md-6"><div class="card p-4 h-100">
+    <div class="d-flex align-items-center gap-3 mb-3"><span class="icon-circle"><i class="bi {{ s.icon }}"></i></span><h2 class="h5 mb-0">{{ s.title }}</h2></div>
+    <p class="text-muted">{{ s.text }}</p>
+    <ul class="small">{% for p in s.points %}<li>{{ p }}</li>{% endfor %}</ul>
+    <a class="btn btn-outline-primary align-self-start mt-auto" href="{% url 'services:request' %}?type={{ s.key }}">Request {{ s.title|lower }}</a>
+  </div></div>
+  {% endfor %}
+</div>
+<p class="text-muted small mt-4">Service requests require a buyer account so our technicians can track your equipment history.</p></div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <nav aria-label="breadcrumb"><ol class="breadcrumb small">
+    <li class="breadcrumb-item"><a href="{% url 'catalog:list' %}">Products</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'catalog:list' %}?category={{ product.category.slug }}">{{ product.category.name }}</a></li>
+    <li class="breadcrumb-item active">{{ product.name }}</li></ol></nav>
+  <div class="row g-4">
+    <div class="col-lg-5"><div class="card"><div class="product-thumb" style="height:320px">
+      {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<i class="bi {{ product.category.icon }}" style="font-size:6rem"></i>{% endif %}</div></div></div>
+    <div class="col-lg-7">
+      <span class="badge bg-primary-soft text-primary">{{ product.get_kind_display }}</span>
+      <h1 class="h3 fw-bold mt-2">{{ product.name }}</h1>
+      <p class="text-muted">{{ product.brand.name }} &middot; SKU {{ product.sku }}</p>
+      <p>{{ product.summary }}</p>
+      <div class="card p-3 mb-3">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+          <div><span class="badge text-bg-{{ product.stock_badge }} fs-6">{{ product.get_stock_status_display }}</span>
+            <div class="small text-muted mt-1">{% if product.stock_status == 'in_stock' or product.stock_status == 'low' %}{{ product.stock_qty }} units available{% elif product.lead_time_days %}Lead time about {{ product.lead_time_days }} days{% endif %}</div></div>
+          <div class="fs-4 fw-bold">{% if product.indicative_price %}${{ product.indicative_price|floatformat:"-2" }}<small class="fs-6 text-muted fw-normal"> indicative</small>{% else %}<span class="fs-6 text-muted">Price on request</span>{% endif %}</div>
+        </div>
+      </div>
+      <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" href="{% url 'enquiries:create' %}?type=price&product={{ product.slug }}">Price enquiry</a>
+        <a class="btn btn-outline-primary" href="{% url 'enquiries:create' %}?type=availability&product={{ product.slug }}">Check availability</a>
+        {% if product.kind == 'spare' %}<a class="btn btn-outline-primary" href="{% url 'enquiries:create' %}?type=compatibility&product={{ product.slug }}">Check compatibility</a>{% endif %}
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'catalog:toggle_save' product.slug %}">{% csrf_token %}
+          <button class="btn btn-light border" type="submit"><i class="bi {% if saved %}bi-bookmark-check-fill text-primary{% else %}bi-bookmark{% endif %}"></i> {% if saved %}Saved{% else %}Save{% endif %}</button></form>
+        {% else %}<a class="btn btn-light border" href="{% url 'accounts:login' %}?next={{ request.path }}"><i class="bi bi-bookmark"></i> Sign in to save</a>{% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4 mt-1">
+    <div class="col-lg-7">
+      <div class="card p-4 mb-4"><h2 class="h5">Description</h2><p class="mb-0">{{ product.description|linebreaksbr }}</p></div>
+      <div class="card p-4"><h2 class="h5">Specifications</h2>
+        <table class="table table-sm mb-0"><tbody>
+          {% for s in product.specs.all %}<tr><th class="w-50 fw-medium text-muted">{{ s.name }}</th><td>{{ s.value }}</td></tr>
+          {% empty %}<tr><td class="text-muted">Specifications on request.</td></tr>{% endfor %}</tbody></table></div>
+    </div>
+    <div class="col-lg-5">
+      <div class="card p-4 mb-4"><h2 class="h5">Datasheets and manuals</h2>
+        {% for d in product.documents.all %}
+          <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+            <span><i class="bi bi-file-earmark-pdf text-danger me-1"></i>{{ d.title }} <span class="badge text-bg-light">{{ d.get_doc_type_display }}</span></span>
+            {% if d.is_public or user.is_authenticated %}<a class="btn btn-sm btn-outline-primary" href="{% url 'catalog:document_download' d.pk %}">Download</a>
+            {% else %}<a class="small" href="{% url 'accounts:login' %}?next={{ request.path }}">Sign in</a>{% endif %}
+          </div>
+        {% empty %}<p class="text-muted small mb-0">No documents uploaded yet.</p>{% endfor %}
+      </div>
+      <div class="card p-4"><h2 class="h5">{% if product.kind == 'spare' %}Fits these machines{% else %}Compatible spare parts{% endif %}</h2>
+        {% for c in compat %}<a class="d-block py-1" href="{{ c.get_absolute_url }}">{{ c.name }} <small class="text-muted">{{ c.sku }}</small></a>
+        {% empty %}<p class="text-muted small mb-0">No compatibility data yet. Send a compatibility enquiry.</p>{% endfor %}
+      </div>
+    </div>
+  </div>
+
+  {% if related %}<h2 class="h5 mt-5 mb-3">Related products</h2>
+  <div class="row g-4">{% for product in related %}<div class="col-md-4">{% include "catalog/_card.html" %}</div>{% endfor %}</div>{% endif %}
+</div>
+{% endblock %}

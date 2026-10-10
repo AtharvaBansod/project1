@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Contact{% endblock %}
+{% block content %}
+<section class="page-header py-5 mt-n3"><div class="container">
+  <h1 class="fw-bold">Contact us</h1><p class="text-muted mb-0">Send us a message and we will reply within one business day.</p>
+</div></section>
+<div class="container py-5">
+  <div class="row g-4">
+    <div class="col-lg-8 mx-auto"><div class="card p-4">
+      <h2 class="h5 mb-3">Contact form</h2>
+      <form method="post" novalidate>{% csrf_token %}
+        {% include "partials/form_fields.html" with form=form %}
+        <button class="btn btn-primary mt-4" type="submit">Send message</button>
+      </form>
+    </div></div>
+  </div>
+  <h2 class="h4 mt-5 mb-3">Frequently asked questions</h2>
+  <div class="accordion" id="faq">
+    {% for f in faqs %}
+    <div class="accordion-item">
+      <h3 class="accordion-header"><button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ f.pk }}">{{ f.question }}</button></h3>
+      <div id="faq{{ f.pk }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#faq"><div class="accordion-body text-muted">{{ f.answer }}</div></div>
+    </div>
+    {% empty %}<p class="text-muted">No FAQs published yet.</p>{% endfor %}
+  </div>
+</div>
+{% endblock %}

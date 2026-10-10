@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Enquiry{% endblock %}
+{% block content %}
+<section class="page-header py-4 mt-n3"><div class="container">
+  <h1 class="h3 fw-bold">Enquiry</h1>
+  <ul class="nav nav-pills mt-3">
+    {% for value, label in types %}<li class="nav-item"><a class="nav-link {% if value == etype %}active{% endif %}" href="?type={{ value }}">{{ label }}</a></li>{% endfor %}
+    <li class="nav-item"><a class="nav-link" href="{% url 'services:request' %}">Service Request</a></li>
+  </ul>
+</div></section>
+<div class="container py-4">
+  <div class="row g-4">
+    <div class="col-lg-8"><div class="card p-4">
+      <p class="text-muted">{{ help }} {% if not user.is_authenticated %}<a href="{% url 'accounts:login' %}?next={{ request.get_full_path }}">Sign in</a> to track your enquiry history.{% endif %}</p>
+      <form method="post" novalidate>{% csrf_token %}
+        <input type="hidden" name="enquiry_type" value="{{ etype }}">
+        {% include "partials/form_fields.html" with form=form %}
+        <button class="btn btn-primary mt-4" type="submit">Submit enquiry</button>
+      </form>
+    </div></div>
+    <div class="col-lg-4"><div class="card p-4"><h2 class="h6">What happens next?</h2>
+      <ol class="small text-muted ps-3 mb-0"><li class="mb-2">You receive an enquiry reference.</li><li class="mb-2">Our sales team reviews it within one business day.</li><li>A response or formal quotation is sent to you.</li></ol></div></div>
+  </div>
+</div>
+{% endblock %}

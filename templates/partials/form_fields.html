@@ -1,0 +1,12 @@
+{% load ui %}
+{% if form.non_field_errors %}<div class="alert alert-danger">{{ form.non_field_errors }}</div>{% endif %}
+<div class="row g-3">
+{% for field in form %}
+  <div class="{% if field|is_wide %}col-12{% else %}col-md-6{% endif %}">
+    <label for="{{ field.id_for_label }}" class="form-label fw-medium">{{ field.label }}</label>
+    {{ field|bs }}
+    {% for e in field.errors %}<div class="invalid-feedback d-block">{{ e }}</div>{% endfor %}
+    {% if field.help_text %}<div class="form-text">{{ field.help_text|safe }}</div>{% endif %}
+  </div>
+{% endfor %}
+</div>

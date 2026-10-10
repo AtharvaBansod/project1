@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Update {{ sr.reference }}{% endblock %}
+{% block content %}
+<div class="container py-4"><div class="row justify-content-center"><div class="col-lg-8">
+  <a class="small" href="{% url 'services:technician_list' %}">&larr; Back to assignments</a>
+  <div class="card p-4 mt-2 mb-4"><h1 class="h5">{{ sr.reference }} &middot; {{ sr.get_service_type_display }}</h1>
+    <p class="mb-1"><strong>Customer:</strong> {{ sr.buyer.buyer_profile.company_name|default:sr.buyer.display_name }} ({{ sr.buyer.email }})</p>
+    <p class="mb-1"><strong>Site:</strong> {{ sr.site_address }}</p><p class="mb-0"><strong>Details:</strong> {{ sr.description }}</p></div>
+  <div class="card p-4"><h2 class="h6">Update status</h2>
+    <form method="post" novalidate>{% csrf_token %}{% include "partials/form_fields.html" with form=form %}
+      <button class="btn btn-primary mt-4" type="submit">Save update</button></form></div>
+</div></div></div>
+{% endblock %}

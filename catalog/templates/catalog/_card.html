@@ -1,0 +1,16 @@
+<div class="card card-hover h-100">
+  <a class="product-thumb text-decoration-none" href="{{ product.get_absolute_url }}">
+    {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<i class="bi {{ product.category.icon }}"></i>{% endif %}
+  </a>
+  <div class="card-body d-flex flex-column">
+    <div class="d-flex justify-content-between small text-muted mb-1">
+      <span>{{ product.brand.name }}</span><span>{{ product.get_kind_display }}</span>
+    </div>
+    <h3 class="h6"><a class="text-dark text-decoration-none" href="{{ product.get_absolute_url }}">{{ product.name }}</a></h3>
+    <p class="small text-muted flex-grow-1">{{ product.summary|truncatechars:90 }}</p>
+    <div class="d-flex justify-content-between align-items-center">
+      <span class="badge text-bg-{{ product.stock_badge }}">{{ product.get_stock_status_display }}</span>
+      <span class="fw-semibold">{% if product.indicative_price %}${{ product.indicative_price|floatformat:"-2" }}{% else %}<small class="text-muted">Price on request</small>{% endif %}</span>
+    </div>
+  </div>
+</div>

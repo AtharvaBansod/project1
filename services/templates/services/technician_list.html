@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}My assignments{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="h3 mb-3">Assigned service requests</h1>
+  <ul class="nav nav-pills mb-3">
+    <li class="nav-item"><a class="nav-link {% if not status %}active{% endif %}" href="?">All</a></li>
+    {% for value, label in statuses %}<li class="nav-item"><a class="nav-link {% if status == value %}active{% endif %}" href="?status={{ value }}">{{ label }}</a></li>{% endfor %}
+  </ul>
+  <div class="row g-3">
+    {% for s in requests %}
+    <div class="col-md-6"><div class="card p-4 h-100">
+      <div class="d-flex justify-content-between"><h2 class="h6">{{ s.reference }} &middot; {{ s.get_service_type_display }}</h2><span class="badge text-bg-{{ s.status_badge }} align-self-start">{{ s.get_status_display }}</span></div>
+      <p class="small text-muted mb-1">{{ s.buyer.buyer_profile.company_name|default:s.buyer.display_name }} &middot; {{ s.buyer.phone }}</p>
+      <p class="small mb-1"><i class="bi bi-geo-alt"></i> {{ s.site_address }}</p>
+      <p class="small mb-1"><i class="bi bi-gear"></i> {{ s.product.name|default:"Equipment not listed" }}{% if s.preferred_date %} &middot; <i class="bi bi-calendar"></i> {{ s.preferred_date|date:"d M Y" }}{% endif %}</p>
+      <p class="small">{{ s.description|truncatechars:140 }}</p>
+      <a class="btn btn-sm btn-primary align-self-start mt-auto" href="{% url 'services:technician_update' s.pk %}">Update status</a>
+    </div></div>
+    {% empty %}<div class="col-12"><div class="card p-5 text-center text-muted">No service requests assigned to you.</div></div>{% endfor %}
+  </div>
+</div>
+{% endblock %}

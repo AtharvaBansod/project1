@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}Sign in required{% endblock %}
+{% block content %}{% include "partials/error_body.html" with code="401" heading="Sign in required" message="You need to sign in to view this page." %}{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+{% block content %}
+<section class="page-header py-4 mt-n3"><div class="container">
+  <h1 class="h3 fw-bold mb-3">Products</h1>
+  <ul class="nav nav-pills">
+    <li class="nav-item"><a class="nav-link {% if not kind %}active{% endif %}" href="?{% if brand %}brand={{ brand }}&{% endif %}{% if category %}category={{ category }}&{% endif %}{% if q %}q={{ q }}{% endif %}">All</a></li>
+    <li class="nav-item"><a class="nav-link {% if kind == 'machine' %}active{% endif %}" href="?kind=machine{% if brand %}&brand={{ brand }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if q %}&q={{ q }}{% endif %}">Machinery list</a></li>
+    <li class="nav-item"><a class="nav-link {% if kind == 'spare' %}active{% endif %}" href="?kind=spare{% if brand %}&brand={{ brand }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if q %}&q={{ q }}{% endif %}">Spare parts</a></li>
+  </ul>
+</div></section>
+<div class="container py-4">
+  <div class="row g-4">
+    <aside class="col-lg-3">
+      <form method="get" class="card p-3">
+        {% if kind %}<input type="hidden" name="kind" value="{{ kind }}">{% endif %}
+        <label class="form-label fw-medium">Search</label>
+        <input class="form-control mb-3" name="q" value="{{ q }}" placeholder="Name, SKU, brand">
+        <label class="form-label fw-medium">Brand</label>
+        <select class="form-select mb-3" name="brand"><option value="">All brands</option>
+          {% for b in brands %}<option value="{{ b.slug }}" {% if b.slug == brand %}selected{% endif %}>{{ b.name }}</option>{% endfor %}</select>
+        <label class="form-label fw-medium">Category</label>
+        <select class="form-select mb-3" name="category"><option value="">All categories</option>
+          {% for c in categories %}<option value="{{ c.slug }}" {% if c.slug == category %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select>
+        <button class="btn btn-primary w-100">Apply filters</button>
+        <a class="btn btn-link w-100 mt-1" href="{% url 'catalog:list' %}">Reset</a>
+      </form>
+    </aside>
+    <div class="col-lg-9">
+      <p class="text-muted small">{{ page.paginator.count }} product{{ page.paginator.count|pluralize }} found</p>
+      <div class="row g-4">
+        {% for product in page %}<div class="col-md-6 col-xl-4">{% include "catalog/_card.html" %}</div>
+        {% empty %}<div class="col-12"><div class="card p-5 text-center text-muted">No products match your filters.</div></div>{% endfor %}
+      </div>
+      {% if page.has_other_pages %}
+      <nav class="mt-4"><ul class="pagination justify-content-center">
+        {% if page.has_previous %}<li class="page-item"><a class="page-link" href="?{{ qs }}&page={{ page.previous_page_number }}">Previous</a></li>{% endif %}
+        <li class="page-item disabled"><span class="page-link">Page {{ page.number }} of {{ page.paginator.num_pages }}</span></li>
+        {% if page.has_next %}<li class="page-item"><a class="page-link" href="?{{ qs }}&page={{ page.next_page_number }}">Next</a></li>{% endif %}
+      </ul></nav>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

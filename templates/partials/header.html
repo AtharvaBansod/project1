@@ -1,0 +1,56 @@
+<header class="site-header sticky-top">
+  <nav class="navbar navbar-expand-lg navbar-dark py-0">
+    <div class="container">
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="{% url 'core:home' %}">
+        <span class="brand-mark"><i class="bi bi-gear-wide-connected"></i></span>{{ SITE_NAME }}
+      </a>
+      <button class="navbar-toggler border-0 my-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          {% for label, name in NAV_LINKS %}
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.view_name == name %}active{% endif %}" href="{% url name %}">{{ label }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+        <div class="d-flex align-items-center gap-1">
+          <button class="btn btn-icon" type="button" data-bs-toggle="collapse" data-bs-target="#searchBar" aria-label="Search"><i class="bi bi-search"></i></button>
+          <div class="dropdown">
+            <button class="btn btn-icon" type="button" data-bs-toggle="dropdown" aria-label="Account"><i class="bi bi-person-circle"></i></button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+              {% if user.is_authenticated %}
+                <li><h6 class="dropdown-header">{{ user.display_name }} &middot; {{ user.get_role_display }}</h6></li>
+                <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">Dashboard</a></li>
+                {% if user.is_buyer %}
+                  <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">Company profile</a></li>
+                  <li><a class="dropdown-item" href="{% url 'catalog:saved' %}">Saved products</a></li>
+                  <li><a class="dropdown-item" href="{% url 'enquiries:history' %}">Enquiry history</a></li>
+                  <li><a class="dropdown-item" href="{% url 'services:buyer_list' %}">Service requests</a></li>
+                {% endif %}
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}
+                    <button class="dropdown-item" type="submit">Sign out</button>
+                  </form>
+                </li>
+              {% else %}
+                <li><a class="dropdown-item" href="{% url 'accounts:login' %}">Sign in</a></li>
+                <li><a class="dropdown-item" href="{% url 'accounts:register' %}">Create buyer account</a></li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="collapse border-top bg-light" id="searchBar">
+    <div class="container py-3">
+      <form action="{% url 'catalog:list' %}" method="get" class="input-group">
+        <input type="search" name="q" class="form-control" placeholder="Search machines, spare parts, part numbers or brands">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Industrial Machinery &amp; Spare Parts Import Catalog{% endblock %}
+{% block content %}
+<section class="hero hero-photo py-5 mt-n3">
+  <div class="container py-4">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <span class="badge bg-primary-soft text-primary mb-3">Import catalog</span>
+        <h1 class="display-5 fw-bold">Industrial machines and spare parts, imported for you.</h1>
+        <p class="lead text-muted">Browse technical datasheets, check availability and send a price enquiry. We support you through delivery and installation.</p>
+        <a href="{% url 'catalog:list' %}" class="btn btn-light btn-lg me-2">Browse products</a>
+        <a href="{% url 'enquiries:create' %}" class="btn btn-outline-light btn-lg">Send enquiry</a>
+      </div>
+      <div class="col-lg-5">
+        <div class="card p-4">
+          <div class="row text-center">
+            <div class="col"><div class="stat-number">{{ brands|length }}</div><small class="text-muted">Brands</small></div>
+            <div class="col"><div class="stat-number">{{ categories|length }}</div><small class="text-muted">Categories</small></div>
+            <div class="col"><div class="stat-number">24h</div><small class="text-muted">Quote reply</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="d-flex justify-content-between align-items-end mb-3"><h2 class="h4 mb-0">Featured machines</h2><a href="{% url 'catalog:list' %}?kind=machine">View all</a></div>
+  <div class="row g-4">{% for product in featured %}<div class="col-md-6 col-lg-4">{% include "catalog/_card.html" %}</div>{% empty %}<p class="text-muted">No featured products yet.</p>{% endfor %}</div>
+</section>
+
+<section class="container pb-5">
+  <h2 class="h4 mb-3">Categories</h2>
+  <div class="row g-3">
+    {% for c in categories %}
+    <div class="col-6 col-md-4 col-lg-3"><a class="text-decoration-none" href="{% url 'catalog:list' %}?category={{ c.slug }}">
+      <div class="card p-3 card-hover text-center"><span class="icon-circle mx-auto mb-2"><i class="bi {{ c.icon }}"></i></span><div class="fw-semibold text-dark">{{ c.name }}</div><small class="text-muted">{{ c.description }}</small></div></a></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="container pb-5">
+  <h2 class="h4 mb-3">Brands we import</h2>
+  <div class="d-flex flex-wrap gap-2">
+    {% for b in brands %}<a class="btn btn-light border" href="{% url 'catalog:list' %}?brand={{ b.slug }}">{{ b.name }} <small class="text-muted">{{ b.country }}</small></a>{% endfor %}
+  </div>
+</section>
+
+<section class="container pb-3">
+  <div class="d-flex justify-content-between align-items-end mb-3"><h2 class="h4 mb-0">Latest arrivals</h2><a href="{% url 'catalog:list' %}">See everything</a></div>
+  <div class="row g-4">{% for product in latest %}<div class="col-md-6 col-lg-3">{% include "catalog/_card.html" %}</div>{% endfor %}</div>
+</section>
+{% endblock %}

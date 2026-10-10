@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ enquiry.reference }}{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <a href="{% url 'enquiries:history' %}" class="small">&larr; Enquiry history</a>
+  <div class="row g-4 mt-1">
+    <div class="col-lg-7"><div class="card p-4">
+      <div class="d-flex justify-content-between"><h1 class="h4">{{ enquiry.reference }}</h1><span class="badge text-bg-light border align-self-start">{{ enquiry.get_status_display }}</span></div>
+      <p class="text-muted">{{ enquiry.get_enquiry_type_display }} &middot; {{ enquiry.created_at|date:"d M Y H:i" }}</p>
+      <dl class="row mb-0">
+        <dt class="col-sm-4">Product</dt><dd class="col-sm-8">{% if enquiry.product %}<a href="{{ enquiry.product.get_absolute_url }}">{{ enquiry.product.name }}</a>{% else %}General{% endif %}</dd>
+        <dt class="col-sm-4">Quantity</dt><dd class="col-sm-8">{{ enquiry.quantity }}</dd>
+        <dt class="col-sm-4">Message</dt><dd class="col-sm-8">{{ enquiry.message|linebreaksbr }}</dd>
+      </dl>
+    </div></div>
+    <div class="col-lg-5"><div class="card p-4"><h2 class="h6">Our response</h2>
+      {% if enquiry.admin_response %}<p>{{ enquiry.admin_response|linebreaksbr }}</p>{% else %}<p class="text-muted small">We have not responded yet.</p>{% endif %}
+      {% if enquiry.quotation %}<a class="btn btn-primary" href="{% url 'enquiries:quotation' enquiry.reference %}"><i class="bi bi-download"></i> Download quotation</a>{% endif %}
+    </div></div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}Session expired{% endblock %}
+{% block content %}{% include "partials/error_body.html" with code="403" heading="Session expired" message="Your form session has expired or is invalid. Go back, refresh the page and submit again." %}{% endblock %}
