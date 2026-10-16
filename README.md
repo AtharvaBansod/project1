@@ -71,17 +71,23 @@ Change these passwords before using the project anywhere other than a local mach
 - Enquiry history with admin responses and quotation downloads
 - Create service requests (installation, maintenance, warranty, training) and track status
 - Download manuals
+- My messages: contact messages sent while signed in, with replies
 
 ### Technician
 - View service requests assigned to them, filter by status
-- Update status (assigned, in progress, completed) and add notes
+- View unassigned open requests and take one
+- Update status (assigned, in progress, completed) and add notes (buyer sees the notes)
 
 ### Admin
-Uses the Django admin panel at /admin/:
+Signing in as admin opens the Manage screens at /manage/:
+- Overview with counts of new enquiries, new service requests and unresolved messages
+- Enquiries inbox: filter and search, open one, set status, write a reply, upload a quotation (reply is emailed and shown to the buyer)
+- Service requests: view details, assign a technician, change status
+- Contact messages: read, reply, mark resolved (reply is emailed and shown on the buyer's My messages page)
+
+Catalog and data management uses the Django admin panel at /admin/:
 - Products: details, price, stock status and quantity, images, specifications, datasheets, manuals, compatible machines
 - Brands and categories
-- Enquiries: inbox, status, written response, quotation upload
-- Service requests: assign technicians, change status
 - Technicians: add and manage technician accounts
 - Users: all accounts and roles
 - FAQs, team members, contact form messages
@@ -106,6 +112,12 @@ Uses the Django admin panel at /admin/:
 | Service requests (buyer) | /services/my-requests/ |
 | New service request | /services/request/ |
 | Technician assignments | /services/technician/ |
+| My messages (buyer) | /my-messages/ |
+| Manage overview (admin) | /manage/ |
+| Manage enquiries | /manage/enquiries/, /manage/enquiries/<reference>/ |
+| Manage service requests | /manage/services/, /manage/services/<id>/ |
+| Manage contact messages | /manage/messages/, /manage/messages/<id>/ |
+| Take open request (technician) | POST /services/technician/<id>/claim/ |
 | Admin panel | /admin/ |
 
 ## Project structure
@@ -115,6 +127,7 @@ Uses the Django admin panel at /admin/:
     catalog/       brands, categories, products, documents, saved products
     enquiries/     enquiries and quotations
     services/      service requests, technician screens
+    manager/       admin screens for enquiries, service requests, contact messages
     core/          home, about, contact, FAQ, team, seed data
     templates/     base layout, header, footer, error pages
     static/        css and images
@@ -132,3 +145,13 @@ Uses the Django admin panel at /admin/:
 | Page text | core/templates/core/ (home, about, contact) |
 | Services list | SERVICES in services/views.py |
 | Sample data | core/seed.py |
+
+## Emails
+
+Replies are sent with Django's console email backend, so in development they are
+printed in the terminal where runserver is running. Configure SMTP in
+config/settings/base.py to send real emails.
+
+## Tests
+
+    python manage.py test manager

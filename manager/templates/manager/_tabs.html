@@ -1,0 +1,12 @@
+<div class="page-header mt-n3 mb-4">
+  <div class="container py-3">
+    <h1 class="h4 mb-3">Manage</h1>
+    <ul class="nav nav-pills">
+      <li class="nav-item"><a class="nav-link {% if active == 'index' %}active{% endif %}" href="{% url 'manager:index' %}">Overview</a></li>
+      <li class="nav-item"><a class="nav-link {% if active == 'enquiries' %}active{% endif %}" href="{% url 'manager:enquiry_list' %}">Enquiries</a></li>
+      <li class="nav-item"><a class="nav-link {% if active == 'services' %}active{% endif %}" href="{% url 'manager:service_list' %}">Service requests</a></li>
+      <li class="nav-item"><a class="nav-link {% if active == 'messages' %}active{% endif %}" href="{% url 'manager:message_list' %}">Contact messages</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'admin:index' %}">Catalog admin</a></li>
+    </ul>
+  </div>
+</div>

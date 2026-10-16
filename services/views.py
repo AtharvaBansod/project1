@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from accounts.decorators import role_required
 from accounts.models import User
@@ -51,12 +52,28 @@ def buyer_list(request):
 
 @role_required(User.Role.TECHNICIAN)
 def technician_list(request):
-    qs = ServiceRequest.objects.filter(technician=request.user).select_related("product", "buyer")
+    scope = request.GET.get("scope", "mine")
     status = request.GET.get("status", "")
-    if status:
-        qs = qs.filter(status=status)
+    if scope == "open":
+        qs = ServiceRequest.objects.filter(technician__isnull=True, status=ServiceRequest.Status.NEW)
+    else:
+        qs = ServiceRequest.objects.filter(technician=request.user)
+        if status:
+            qs = qs.filter(status=status)
     return render(request, "services/technician_list.html", {
-        "requests": qs, "status": status, "statuses": ServiceRequest.Status.choices})
+        "requests": qs.select_related("product", "buyer"), "status": status, "scope": scope,
+        "statuses": ServiceRequest.Status.choices,
+        "open_count": ServiceRequest.objects.filter(technician__isnull=True, status=ServiceRequest.Status.NEW).count()})
+
+
+@role_required(User.Role.TECHNICIAN)
+@require_POST
+def technician_claim(request, pk):
+    sr = get_object_or_404(ServiceRequest, pk=pk, technician__isnull=True, status=ServiceRequest.Status.NEW)
+    sr.technician = request.user
+    sr.save()
+    messages.success(request, f"{sr.reference} is now assigned to you.")
+    return redirect("services:technician_list")
 
 
 @role_required(User.Role.TECHNICIAN)

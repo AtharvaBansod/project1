@@ -27,7 +27,7 @@ def register(request):
 def dashboard(request):
     user = request.user
     if user.is_admin_role:
-        return redirect("admin:index")
+        return redirect("manager:index")
     if user.is_technician:
         return redirect("services:technician_list")
     ctx = {

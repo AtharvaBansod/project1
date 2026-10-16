@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "catalog",
     "enquiries",
     "services",
+    "manager",
     "core",
 ]
 

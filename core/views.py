@@ -1,10 +1,11 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from catalog.models import Brand, Category, Product
 
 from .forms import ContactForm
-from .models import FAQ, TeamMember
+from .models import FAQ, ContactMessage, TeamMember
 
 
 def home(request):
@@ -33,7 +34,16 @@ def contact(request):
         initial = {"name": request.user.display_name, "email": request.user.email}
     form = ContactForm(request.POST or None, initial=initial)
     if request.method == "POST" and form.is_valid():
-        form.save()
+        contact_message = form.save(commit=False)
+        if request.user.is_authenticated:
+            contact_message.user = request.user
+        contact_message.save()
         messages.success(request, "Thanks! Your message has been sent. We reply within one business day.")
         return redirect("core:contact")
     return render(request, "core/contact.html", {"form": form, "faqs": FAQ.objects.filter(is_active=True)})
+
+
+@login_required
+def my_messages(request):
+    messages_sent = ContactMessage.objects.filter(user=request.user)
+    return render(request, "core/my_messages.html", {"messages_sent": messages_sent})

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ service.reference }}{% endblock %}
+{% block content %}
+{% include "manager/_tabs.html" with active="services" %}
+<div class="container pb-4">
+  <a class="small" href="{% url 'manager:service_list' %}">&larr; All service requests</a>
+  <div class="row g-4 mt-1">
+    <div class="col-lg-6"><div class="card p-4">
+      <div class="d-flex justify-content-between"><h2 class="h5">{{ service.reference }} &middot; {{ service.get_service_type_display }}</h2><span class="badge text-bg-{{ service.status_badge }} align-self-start">{{ service.get_status_display }}</span></div>
+      <p class="text-muted">Requested {{ service.created_at|date:"d M Y H:i" }}</p>
+      <dl class="row mb-0">
+        <dt class="col-sm-4">Buyer</dt><dd class="col-sm-8">{{ service.buyer.display_name }} ({{ service.buyer.email }})</dd>
+        <dt class="col-sm-4">Company</dt><dd class="col-sm-8">{{ service.buyer.buyer_profile.company_name|default:"-" }}</dd>
+        <dt class="col-sm-4">Phone</dt><dd class="col-sm-8">{{ service.buyer.phone|default:"-" }}</dd>
+        <dt class="col-sm-4">Machine</dt><dd class="col-sm-8">{{ service.product.name|default:"Not listed" }}</dd>
+        <dt class="col-sm-4">Site</dt><dd class="col-sm-8">{{ service.site_address }}</dd>
+        <dt class="col-sm-4">Preferred date</dt><dd class="col-sm-8">{{ service.preferred_date|date:"d M Y"|default:"-" }}</dd>
+        <dt class="col-sm-4">Details</dt><dd class="col-sm-8">{{ service.description|linebreaksbr }}</dd>
+        <dt class="col-sm-4">Technician notes</dt><dd class="col-sm-8">{{ service.technician_notes|linebreaksbr|default:"-" }}</dd>
+      </dl>
+    </div></div>
+    <div class="col-lg-6"><div class="card p-4">
+      <h2 class="h5">Assign and update</h2>
+      <form method="post" novalidate>{% csrf_token %}
+        {% include "partials/form_fields.html" with form=form %}
+        <button class="btn btn-primary mt-4" type="submit">Save</button>
+      </form>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

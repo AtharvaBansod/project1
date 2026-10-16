@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ enquiry.reference }}{% endblock %}
+{% block content %}
+{% include "manager/_tabs.html" with active="enquiries" %}
+<div class="container pb-4">
+  <a class="small" href="{% url 'manager:enquiry_list' %}">&larr; All enquiries</a>
+  <div class="row g-4 mt-1">
+    <div class="col-lg-6"><div class="card p-4">
+      <div class="d-flex justify-content-between"><h2 class="h5">{{ enquiry.reference }}</h2><span class="badge text-bg-light border align-self-start">{{ enquiry.get_status_display }}</span></div>
+      <p class="text-muted">{{ enquiry.get_enquiry_type_display }} &middot; {{ enquiry.created_at|date:"d M Y H:i" }}</p>
+      <dl class="row mb-0">
+        <dt class="col-sm-4">Name</dt><dd class="col-sm-8">{{ enquiry.name }}</dd>
+        <dt class="col-sm-4">Email</dt><dd class="col-sm-8">{{ enquiry.email }}</dd>
+        <dt class="col-sm-4">Phone</dt><dd class="col-sm-8">{{ enquiry.phone|default:"-" }}</dd>
+        <dt class="col-sm-4">Company</dt><dd class="col-sm-8">{{ enquiry.company|default:"-" }}</dd>
+        <dt class="col-sm-4">Account</dt><dd class="col-sm-8">{% if enquiry.user %}{{ enquiry.user.username }}{% else %}Guest{% endif %}</dd>
+        <dt class="col-sm-4">Product</dt><dd class="col-sm-8">{% if enquiry.product %}<a href="{{ enquiry.product.get_absolute_url }}">{{ enquiry.product.name }}</a> ({{ enquiry.product.sku }}){% else %}General{% endif %}</dd>
+        <dt class="col-sm-4">Quantity</dt><dd class="col-sm-8">{{ enquiry.quantity }}</dd>
+        <dt class="col-sm-4">Message</dt><dd class="col-sm-8">{{ enquiry.message|linebreaksbr }}</dd>
+      </dl>
+    </div></div>
+    <div class="col-lg-6"><div class="card p-4">
+      <h2 class="h5">Reply and update</h2>
+      <form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
+        {% include "partials/form_fields.html" with form=form %}
+        {% if enquiry.quotation %}<p class="small mt-2 mb-0">Current quotation: <a href="{{ enquiry.quotation.url }}" target="_blank">{{ enquiry.quotation.name }}</a></p>{% endif %}
+        <button class="btn btn-primary mt-4" type="submit">Save reply</button>
+        <p class="form-text">The reply is emailed to {{ enquiry.email }} and shown to the buyer under Enquiry history.</p>
+      </form>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

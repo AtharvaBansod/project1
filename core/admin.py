@@ -8,7 +8,7 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_display = ("subject", "name", "email", "is_resolved", "created_at")
     list_filter = ("is_resolved",)
     list_editable = ("is_resolved",)
-    readonly_fields = ("name", "email", "subject", "message", "created_at")
+    readonly_fields = ("user", "name", "email", "subject", "message", "created_at", "replied_at")
 
 
 @admin.register(FAQ)

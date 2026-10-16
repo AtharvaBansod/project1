@@ -10,4 +10,5 @@ urlpatterns = [
     path("my-requests/", views.buyer_list, name="buyer_list"),
     path("technician/", views.technician_list, name="technician_list"),
     path("technician/<int:pk>/", views.technician_update, name="technician_update"),
+    path("technician/<int:pk>/claim/", views.technician_claim, name="technician_claim"),
 ]

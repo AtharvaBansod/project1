@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 
@@ -6,6 +7,10 @@ class ContactMessage(models.Model):
     email = models.EmailField()
     subject = models.CharField(max_length=150)
     message = models.TextField()
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
+                             related_name="contact_messages")
+    reply = models.TextField(blank=True)
+    replied_at = models.DateTimeField(null=True, blank=True)
     is_resolved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
 

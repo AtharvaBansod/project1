@@ -28,6 +28,14 @@
                   <li><a class="dropdown-item" href="{% url 'catalog:saved' %}">Saved products</a></li>
                   <li><a class="dropdown-item" href="{% url 'enquiries:history' %}">Enquiry history</a></li>
                   <li><a class="dropdown-item" href="{% url 'services:buyer_list' %}">Service requests</a></li>
+                  <li><a class="dropdown-item" href="{% url 'core:my_messages' %}">My messages</a></li>
+                {% elif user.is_admin_role %}
+                  <li><a class="dropdown-item" href="{% url 'manager:enquiry_list' %}">Enquiries</a></li>
+                  <li><a class="dropdown-item" href="{% url 'manager:service_list' %}">Service requests</a></li>
+                  <li><a class="dropdown-item" href="{% url 'manager:message_list' %}">Contact messages</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin:index' %}">Catalog admin</a></li>
+                {% elif user.is_technician %}
+                  <li><a class="dropdown-item" href="{% url 'services:technician_list' %}">My assignments</a></li>
                 {% endif %}
                 <li><hr class="dropdown-divider"></li>
                 <li>

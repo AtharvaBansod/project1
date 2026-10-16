@@ -2,10 +2,11 @@
 {% block title %}My assignments{% endblock %}
 {% block content %}
 <div class="container py-4">
-  <h1 class="h3 mb-3">Assigned service requests</h1>
+  <h1 class="h3 mb-3">Service requests</h1>
   <ul class="nav nav-pills mb-3">
-    <li class="nav-item"><a class="nav-link {% if not status %}active{% endif %}" href="?">All</a></li>
-    {% for value, label in statuses %}<li class="nav-item"><a class="nav-link {% if status == value %}active{% endif %}" href="?status={{ value }}">{{ label }}</a></li>{% endfor %}
+    <li class="nav-item"><a class="nav-link {% if scope == 'mine' and not status %}active{% endif %}" href="?">My assignments</a></li>
+    {% for value, label in statuses %}<li class="nav-item"><a class="nav-link {% if scope == 'mine' and status == value %}active{% endif %}" href="?status={{ value }}">{{ label }}</a></li>{% endfor %}
+    <li class="nav-item ms-lg-3"><a class="nav-link {% if scope == 'open' %}active{% endif %}" href="?scope=open">Open requests <span class="badge text-bg-warning">{{ open_count }}</span></a></li>
   </ul>
   <div class="row g-3">
     {% for s in requests %}
@@ -15,9 +16,13 @@
       <p class="small mb-1"><i class="bi bi-geo-alt"></i> {{ s.site_address }}</p>
       <p class="small mb-1"><i class="bi bi-gear"></i> {{ s.product.name|default:"Equipment not listed" }}{% if s.preferred_date %} &middot; <i class="bi bi-calendar"></i> {{ s.preferred_date|date:"d M Y" }}{% endif %}</p>
       <p class="small">{{ s.description|truncatechars:140 }}</p>
+      {% if scope == 'open' %}
+      <form method="post" action="{% url 'services:technician_claim' s.pk %}" class="mt-auto">{% csrf_token %}<button class="btn btn-sm btn-primary" type="submit">Take this request</button></form>
+      {% else %}
       <a class="btn btn-sm btn-primary align-self-start mt-auto" href="{% url 'services:technician_update' s.pk %}">Update status</a>
+      {% endif %}
     </div></div>
-    {% empty %}<div class="col-12"><div class="card p-5 text-center text-muted">No service requests assigned to you.</div></div>{% endfor %}
+    {% empty %}<div class="col-12"><div class="card p-5 text-center text-muted">{% if scope == 'open' %}No unassigned requests right now.{% else %}No service requests assigned to you.{% endif %}</div></div>{% endfor %}
   </div>
 </div>
 {% endblock %}

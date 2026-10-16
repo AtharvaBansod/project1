@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Contact messages{% endblock %}
+{% block content %}
+{% include "manager/_tabs.html" with active="messages" %}
+<div class="container pb-4">
+  <ul class="nav nav-pills mb-3">
+    <li class="nav-item"><a class="nav-link {% if not state %}active{% endif %}" href="?">All</a></li>
+    <li class="nav-item"><a class="nav-link {% if state == 'open' %}active{% endif %}" href="?state=open">Open</a></li>
+    <li class="nav-item"><a class="nav-link {% if state == 'resolved' %}active{% endif %}" href="?state=resolved">Resolved</a></li>
+  </ul>
+  <div class="card"><table class="table align-middle mb-0">
+    <thead><tr><th>Subject</th><th>From</th><th>Received</th><th>Replied</th><th>Status</th></tr></thead><tbody>
+    {% for m in messages_list %}<tr>
+      <td><a href="{% url 'manager:message_detail' m.pk %}">{{ m.subject }}</a></td><td>{{ m.name }}<div class="small text-muted">{{ m.email }}</div></td>
+      <td>{{ m.created_at|date:"d M Y H:i" }}</td><td>{% if m.replied_at %}{{ m.replied_at|date:"d M Y" }}{% else %}-{% endif %}</td>
+      <td><span class="badge text-bg-{% if m.is_resolved %}success{% else %}warning{% endif %}">{% if m.is_resolved %}Resolved{% else %}Open{% endif %}</span></td></tr>
+    {% empty %}<tr><td colspan="5" class="text-center text-muted py-4">No messages found.</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

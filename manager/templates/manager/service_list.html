@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Service requests{% endblock %}
+{% block content %}
+{% include "manager/_tabs.html" with active="services" %}
+<div class="container pb-4">
+  <ul class="nav nav-pills mb-3">
+    <li class="nav-item"><a class="nav-link {% if not status %}active{% endif %}" href="?">All</a></li>
+    {% for value, label in statuses %}<li class="nav-item"><a class="nav-link {% if status == value %}active{% endif %}" href="?status={{ value }}">{{ label }}</a></li>{% endfor %}
+  </ul>
+  <div class="card"><table class="table align-middle mb-0">
+    <thead><tr><th>Reference</th><th>Service</th><th>Buyer</th><th>Machine</th><th>Technician</th><th>Status</th></tr></thead><tbody>
+    {% for s in requests %}<tr>
+      <td><a href="{% url 'manager:service_detail' s.pk %}">{{ s.reference }}</a></td><td>{{ s.get_service_type_display }}</td>
+      <td>{{ s.buyer.buyer_profile.company_name|default:s.buyer.display_name }}</td><td>{{ s.product.name|default:"-" }}</td>
+      <td>{{ s.technician.display_name|default:"Not assigned" }}</td><td><span class="badge text-bg-{{ s.status_badge }}">{{ s.get_status_display }}</span></td></tr>
+    {% empty %}<tr><td colspan="6" class="text-center text-muted py-4">No service requests found.</td></tr>{% endfor %}</tbody></table></div>
+</div>
+{% endblock %}

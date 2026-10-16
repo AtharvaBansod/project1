@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}My messages{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3"><h1 class="h3 mb-0">My messages</h1><a class="btn btn-primary" href="{% url 'core:contact' %}">New message</a></div>
+  {% for m in messages_sent %}
+  <div class="card p-4 mb-3">
+    <div class="d-flex justify-content-between"><h2 class="h6 mb-1">{{ m.subject }}</h2>
+      <span class="badge text-bg-{% if m.is_resolved %}success{% else %}warning{% endif %} align-self-start">{% if m.is_resolved %}Resolved{% else %}Open{% endif %}</span></div>
+    <p class="small text-muted">Sent {{ m.created_at|date:"d M Y H:i" }}</p>
+    <p>{{ m.message|linebreaksbr }}</p>
+    {% if m.reply %}<div class="border-start border-3 ps-3"><div class="small text-muted">Reply &middot; {{ m.replied_at|date:"d M Y H:i" }}</div>{{ m.reply|linebreaksbr }}</div>
+    {% else %}<p class="small text-muted mb-0">No reply yet.</p>{% endif %}
+  </div>
+  {% empty %}<div class="card p-5 text-center text-muted">You have not sent any messages yet.</div>{% endfor %}
+</div>
+{% endblock %}

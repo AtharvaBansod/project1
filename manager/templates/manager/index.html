@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Manage{% endblock %}
+{% block content %}
+{% include "manager/_tabs.html" with active="index" %}
+<div class="container pb-4">
+  <div class="row g-3 mb-4">
+    <div class="col-md-4"><a class="text-decoration-none" href="{% url 'manager:enquiry_list' %}?status=new"><div class="card p-3 card-hover">
+      <div class="stat-number">{{ new_enquiries }}</div><div class="text-muted">New enquiries <small>({{ open_enquiries }} open)</small></div></div></a></div>
+    <div class="col-md-4"><a class="text-decoration-none" href="{% url 'manager:service_list' %}?status=new"><div class="card p-3 card-hover">
+      <div class="stat-number">{{ new_services }}</div><div class="text-muted">New service requests <small>({{ open_services }} open)</small></div></div></a></div>
+    <div class="col-md-4"><a class="text-decoration-none" href="{% url 'manager:message_list' %}?state=open"><div class="card p-3 card-hover">
+      <div class="stat-number">{{ open_messages }}</div><div class="text-muted">Unresolved contact messages</div></div></a></div>
+  </div>
+  <div class="row g-4">
+    <div class="col-lg-4"><div class="card p-4"><h2 class="h6">Latest enquiries</h2>
+      {% for e in recent_enquiries %}<a class="d-flex justify-content-between text-decoration-none py-2 border-bottom" href="{% url 'manager:enquiry_detail' e.reference %}"><span>{{ e.reference }} &middot; {{ e.name }}</span><span class="badge text-bg-light border">{{ e.get_status_display }}</span></a>
+      {% empty %}<p class="text-muted small mb-0">Nothing yet.</p>{% endfor %}</div></div>
+    <div class="col-lg-4"><div class="card p-4"><h2 class="h6">Latest service requests</h2>
+      {% for s in recent_services %}<a class="d-flex justify-content-between text-decoration-none py-2 border-bottom" href="{% url 'manager:service_detail' s.pk %}"><span>{{ s.reference }} &middot; {{ s.get_service_type_display }}</span><span class="badge text-bg-{{ s.status_badge }}">{{ s.get_status_display }}</span></a>
+      {% empty %}<p class="text-muted small mb-0">Nothing yet.</p>{% endfor %}</div></div>
+    <div class="col-lg-4"><div class="card p-4"><h2 class="h6">Latest contact messages</h2>
+      {% for m in recent_messages %}<a class="d-flex justify-content-between text-decoration-none py-2 border-bottom" href="{% url 'manager:message_detail' m.pk %}"><span>{{ m.subject|truncatechars:28 }}</span><span class="badge text-bg-{% if m.is_resolved %}success{% else %}warning{% endif %}">{% if m.is_resolved %}Resolved{% else %}Open{% endif %}</span></a>
+      {% empty %}<p class="text-muted small mb-0">Nothing yet.</p>{% endfor %}</div></div>
+  </div>
+</div>
+{% endblock %}
