@@ -37,6 +37,8 @@ class ServiceRequest(models.Model):
     def save(self, *args, **kwargs):
         if self.technician and self.status == self.Status.NEW:
             self.status = self.Status.ASSIGNED
+        elif not self.technician and self.status == self.Status.ASSIGNED:
+            self.status = self.Status.NEW
         super().save(*args, **kwargs)
         if not self.reference:
             self.reference = f"SVC-{self.pk:05d}"

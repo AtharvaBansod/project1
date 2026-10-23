@@ -34,6 +34,15 @@ class ProductAdminForm(forms.ModelForm):
         if self.instance.pk:
             self.fields["compatible_parts"].initial = self.instance.compatible_parts.all()
 
+    def clean(self):
+        data = super().clean()
+        kind = data.get("kind")
+        if kind == Product.Kind.MACHINE and data.get("compatible_machines"):
+            self.add_error("compatible_machines", "Machines cannot be linked to other machines. Use Compatible spare parts instead.")
+        if kind == Product.Kind.SPARE and data.get("compatible_parts"):
+            self.add_error("compatible_parts", "Spare parts cannot have compatible parts. Use Compatible machines instead.")
+        return data
+
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):

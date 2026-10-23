@@ -151,7 +151,3 @@ Catalog and data management uses the Django admin panel at /admin/:
 Replies are sent with Django's console email backend, so in development they are
 printed in the terminal where runserver is running. Configure SMTP in
 config/settings/base.py to send real emails.
-
-## Tests
-
-    python manage.py test manager

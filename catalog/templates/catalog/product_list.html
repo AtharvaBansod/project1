@@ -4,9 +4,9 @@
 <section class="page-header py-4 mt-n3"><div class="container">
   <h1 class="h3 fw-bold mb-3">Products</h1>
   <ul class="nav nav-pills">
-    <li class="nav-item"><a class="nav-link {% if not kind %}active{% endif %}" href="?{% if brand %}brand={{ brand }}&{% endif %}{% if category %}category={{ category }}&{% endif %}{% if q %}q={{ q }}{% endif %}">All</a></li>
-    <li class="nav-item"><a class="nav-link {% if kind == 'machine' %}active{% endif %}" href="?kind=machine{% if brand %}&brand={{ brand }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if q %}&q={{ q }}{% endif %}">Machinery list</a></li>
-    <li class="nav-item"><a class="nav-link {% if kind == 'spare' %}active{% endif %}" href="?kind=spare{% if brand %}&brand={{ brand }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if q %}&q={{ q }}{% endif %}">Spare parts</a></li>
+    <li class="nav-item"><a class="nav-link {% if not kind %}active{% endif %}" href="?{% if brand %}brand={{ brand }}&{% endif %}{% if category %}category={{ category }}&{% endif %}{% if q %}q={{ q|urlencode }}{% endif %}">All</a></li>
+    <li class="nav-item"><a class="nav-link {% if kind == 'machine' %}active{% endif %}" href="?kind=machine{% if brand %}&brand={{ brand }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Machinery list</a></li>
+    <li class="nav-item"><a class="nav-link {% if kind == 'spare' %}active{% endif %}" href="?kind=spare{% if brand %}&brand={{ brand }}{% endif %}{% if category %}&category={{ category }}{% endif %}{% if q %}&q={{ q|urlencode }}{% endif %}">Spare parts</a></li>
   </ul>
 </div></section>
 <div class="container py-4">

@@ -24,3 +24,9 @@ staticfiles/
 .DS_Store
 Thumbs.db
 .claude/
+
+# Tests
+tests/
+tests.py
+test_*.py
+core/testing.py
