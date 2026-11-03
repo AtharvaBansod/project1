@@ -1,10 +1,14 @@
+import json
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count, Q
 from django.shortcuts import redirect, render
 
 from catalog.models import Brand, Category, Product
 
 from .forms import ContactForm
+from .seed import SEED_IMAGES
 from .models import FAQ, ContactMessage, TeamMember
 
 
@@ -13,7 +17,9 @@ def home(request):
     return render(request, "core/home.html", {
         "featured": active.filter(is_featured=True)[:6],
         "latest": active[:4],
-        "categories": Category.objects.all(),
+        "categories": Category.objects.annotate(total=Count("products", filter=Q(products__is_active=True))),
+        "machine_count": active.filter(kind="machine").count(),
+        "spare_count": active.filter(kind="spare").count(),
         "brands": Brand.objects.all(),
     })
 
@@ -47,3 +53,11 @@ def contact(request):
 def my_messages(request):
     messages_sent = ContactMessage.objects.filter(user=request.user)
     return render(request, "core/my_messages.html", {"messages_sent": messages_sent})
+
+
+def credits(request):
+    items = json.loads((SEED_IMAGES / "credits.json").read_text(encoding="utf-8"))
+    names = dict(Product.objects.values_list("sku", "name"))
+    for item in items:
+        item["product"] = names.get(item["sku"], item["sku"])
+    return render(request, "core/credits.html", {"items": items})

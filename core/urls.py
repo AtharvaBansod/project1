@@ -9,4 +9,5 @@ urlpatterns = [
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
     path("my-messages/", views.my_messages, name="my_messages"),
+    path("image-credits/", views.credits, name="credits"),
 ]

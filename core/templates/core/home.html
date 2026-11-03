@@ -1,22 +1,107 @@
 {% extends "base.html" %}
 {% block title %}Industrial Machinery &amp; Spare Parts Import Catalog{% endblock %}
 {% block content %}
-<section class="hero hero-photo py-5 mt-n3">
-  <div class="container py-4">
-    <div class="row align-items-center g-4">
+<section class="hero hero-photo mt-n3">
+  <div class="container py-5">
+    <div class="row align-items-center g-5">
       <div class="col-lg-7">
-        <span class="badge bg-primary-soft text-primary mb-3">Import catalog</span>
-        <h1 class="display-5 fw-bold">Industrial machines and spare parts, imported for you.</h1>
-        <p class="lead text-muted">Browse technical datasheets, check availability and send a price enquiry. We support you through delivery and installation.</p>
-        <a href="{% url 'catalog:list' %}" class="btn btn-light btn-lg me-2">Browse products</a>
-        <a href="{% url 'enquiries:create' %}" class="btn btn-outline-light btn-lg">Send enquiry</a>
+        <span class="eyebrow mb-3">Industrial import catalog</span>
+        <h1 class="mb-3">Machines and spare parts, <em>sourced and supported</em> end to end.</h1>
+        <p class="lead mb-4">Compare machines, read datasheets, check stock and part compatibility, then send one enquiry. We handle import, installation and training.</p>
+        <form action="{% url 'catalog:list' %}" method="get" class="hero-search mb-3">
+          <input class="form-control" name="q" placeholder="Search by machine, part number or brand" aria-label="Search the catalog">
+          <button class="btn btn-primary px-4" type="submit"><i class="bi bi-search me-1"></i> Search</button>
+        </form>
+        <div class="hero-chips">
+          {% for c in categories|slice:":4" %}<a href="{% url 'catalog:list' %}?category={{ c.slug }}">{{ c.name }}</a>{% endfor %}
+        </div>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+          <a href="{% url 'catalog:list' %}" class="btn btn-light btn-lg">Browse products</a>
+          <a href="{% url 'enquiries:create' %}" class="btn btn-outline-light btn-lg">Send enquiry</a>
+        </div>
       </div>
+      <div class="col-lg-5 d-none d-lg-block">
+        <div class="hero-panel">
+          <div class="eyebrow mb-3">Catalog at a glance</div>
+          <div class="row g-3 text-center">
+            <div class="col-4"><div class="stat-number">{{ machine_count }}</div><small>Machines</small></div>
+            <div class="col-4"><div class="stat-number">{{ spare_count }}</div><small>Spare parts</small></div>
+            <div class="col-4"><div class="stat-number">{{ brands|length }}</div><small>Brands</small></div>
+          </div>
+          <hr class="border-secondary my-3">
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-clock-history fs-3 text-accent"></i>
+            <div><strong class="d-block">Quotation within one business day</strong><small>Price, availability and lead time in one reply.</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="trust-strip">
+  <div class="container">
+    <div class="row">
+      <div class="col-6 col-lg-3"><div class="trust-item"><i class="bi bi-patch-check"></i><div><strong>Verified listings</strong><span>Specs from factory data</span></div></div></div>
+      <div class="col-6 col-lg-3"><div class="trust-item"><i class="bi bi-file-earmark-text"></i><div><strong>Datasheets &amp; manuals</strong><span>Download before you buy</span></div></div></div>
+      <div class="col-6 col-lg-3"><div class="trust-item"><i class="bi bi-diagram-3"></i><div><strong>Part compatibility</strong><span>Spares mapped to machines</span></div></div></div>
+      <div class="col-6 col-lg-3"><div class="trust-item"><i class="bi bi-tools"></i><div><strong>Installation support</strong><span>Trained field engineers</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="container py-5 mt-2">
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+    <div><span class="eyebrow">Hand-picked</span><h2 class="section-title mb-0">Featured machines</h2></div>
+    <a class="link-arrow" href="{% url 'catalog:list' %}?kind=machine">View all machinery <i class="bi bi-arrow-right"></i></a>
+  </div>
+  <div class="row g-4">{% for product in featured %}<div class="col-md-6 col-lg-4">{% include "catalog/_card.html" %}</div>{% empty %}<p class="text-muted">No featured products yet.</p>{% endfor %}</div>
+</section>
+
+<section class="container pb-5">
+  <div class="mb-4"><span class="eyebrow">Browse by type</span><h2 class="section-title mb-0">Categories</h2></div>
+  <div class="row g-3">
+    {% for c in categories %}
+    <div class="col-md-6 col-lg-4"><a class="card card-hover cat-tile" href="{% url 'catalog:list' %}?category={{ c.slug }}">
+      <span class="icon-circle"><i class="bi {{ c.icon }}"></i></span>
+      <span><strong>{{ c.name }}</strong><small>{{ c.description }}</small></span>
+      <span class="count">{{ c.total }}</span>
+    </a></div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="blueprint border-top border-bottom py-5">
+  <div class="container">
+    <div class="text-center mb-4"><span class="eyebrow">From enquiry to commissioning</span><h2 class="section-title">How buying works</h2>
+      <p class="section-lead mx-auto">One simple process for both machines and spare parts.</p></div>
+    <div class="row g-3 steps">
+      <div class="col-md-6 col-lg-3"><div class="card step"><h3>Find the right product</h3><p>Filter by category or brand and compare specifications and datasheets.</p></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card step"><h3>Send an enquiry</h3><p>Ask for price, availability or spare part compatibility in one form.</p></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card step"><h3>Receive a quotation</h3><p>Our team replies with a formal quotation and lead time you can download.</p></div></div>
+      <div class="col-md-6 col-lg-3"><div class="card step"><h3>Install and train</h3><p>Raise a service request and a technician handles installation and training.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="band-dark py-5">
+  <div class="container py-3">
+    <div class="row g-5 align-items-center">
       <div class="col-lg-5">
-        <div class="card p-4">
-          <div class="row text-center">
-            <div class="col"><div class="stat-number">{{ brands|length }}</div><small class="text-muted">Brands</small></div>
-            <div class="col"><div class="stat-number">{{ categories|length }}</div><small class="text-muted">Categories</small></div>
-            <div class="col"><div class="stat-number">24h</div><small class="text-muted">Quote reply</small></div>
+        <span class="eyebrow">Why IndustroLink</span>
+        <h2 class="section-title">Built for plant engineers and purchase teams.</h2>
+        <p class="mb-4">Every listing links its documents, stock position and the parts that fit it, so the right decision does not depend on a dozen emails.</p>
+        <a class="btn btn-accent btn-lg" href="{% url 'services:list' %}">See our services</a>
+      </div>
+      <div class="col-lg-7">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="feature-line"><i class="bi bi-globe2"></i><div><strong>Global sourcing</strong>Machines from Germany, Japan, Sweden, USA and China.</div></div>
+            <div class="feature-line"><i class="bi bi-box-seam"></i><div><strong>Live stock status</strong>In stock, low stock or on order with lead time.</div></div>
+          </div>
+          <div class="col-md-6">
+            <div class="feature-line"><i class="bi bi-shield-check"></i><div><strong>Warranty handled</strong>Claims and replacement parts managed for you.</div></div>
+            <div class="feature-line"><i class="bi bi-person-gear"></i><div><strong>Field service</strong>Track installation and maintenance requests online.</div></div>
           </div>
         </div>
       </div>
@@ -25,29 +110,29 @@
 </section>
 
 <section class="container py-5">
-  <div class="d-flex justify-content-between align-items-end mb-3"><h2 class="h4 mb-0">Featured machines</h2><a href="{% url 'catalog:list' %}?kind=machine">View all</a></div>
-  <div class="row g-4">{% for product in featured %}<div class="col-md-6 col-lg-4">{% include "catalog/_card.html" %}</div>{% empty %}<p class="text-muted">No featured products yet.</p>{% endfor %}</div>
-</section>
-
-<section class="container pb-5">
-  <h2 class="h4 mb-3">Categories</h2>
+  <div class="mb-4"><span class="eyebrow">Manufacturers</span><h2 class="section-title mb-0">Brands we import</h2></div>
   <div class="row g-3">
-    {% for c in categories %}
-    <div class="col-6 col-md-4 col-lg-3"><a class="text-decoration-none" href="{% url 'catalog:list' %}?category={{ c.slug }}">
-      <div class="card p-3 card-hover text-center"><span class="icon-circle mx-auto mb-2"><i class="bi {{ c.icon }}"></i></span><div class="fw-semibold text-dark">{{ c.name }}</div><small class="text-muted">{{ c.description }}</small></div></a></div>
-    {% endfor %}
+    {% for b in brands %}<div class="col-6 col-md-4 col-lg"><a class="card card-hover brand-chip" href="{% url 'catalog:list' %}?brand={{ b.slug }}"><strong>{{ b.name }}</strong><span>{{ b.country }}</span></a></div>{% endfor %}
   </div>
 </section>
 
 <section class="container pb-5">
-  <h2 class="h4 mb-3">Brands we import</h2>
-  <div class="d-flex flex-wrap gap-2">
-    {% for b in brands %}<a class="btn btn-light border" href="{% url 'catalog:list' %}?brand={{ b.slug }}">{{ b.name }} <small class="text-muted">{{ b.country }}</small></a>{% endfor %}
+  <div class="d-flex flex-wrap justify-content-between align-items-end gap-2 mb-4">
+    <div><span class="eyebrow">New in catalog</span><h2 class="section-title mb-0">Latest arrivals</h2></div>
+    <a class="link-arrow" href="{% url 'catalog:list' %}">See everything <i class="bi bi-arrow-right"></i></a>
   </div>
+  <div class="row g-4">{% for product in latest %}<div class="col-md-6 col-lg-3">{% include "catalog/_card.html" %}</div>{% endfor %}</div>
 </section>
 
 <section class="container pb-3">
-  <div class="d-flex justify-content-between align-items-end mb-3"><h2 class="h4 mb-0">Latest arrivals</h2><a href="{% url 'catalog:list' %}">See everything</a></div>
-  <div class="row g-4">{% for product in latest %}<div class="col-md-6 col-lg-3">{% include "catalog/_card.html" %}</div>{% endfor %}</div>
+  <div class="cta-box">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-8">
+        <h2 class="h3 mb-2">Need a price or a part that fits your machine?</h2>
+        <p class="mb-0">Send one enquiry with your machine model. We confirm price, stock and compatibility in a single reply.</p>
+      </div>
+      <div class="col-lg-4 text-lg-end"><a class="btn btn-accent btn-lg" href="{% url 'enquiries:create' %}">Start an enquiry</a></div>
+    </div>
+  </div>
 </section>
 {% endblock %}

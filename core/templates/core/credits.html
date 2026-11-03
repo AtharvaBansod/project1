@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Image credits{% endblock %}
+{% block content %}
+<section class="page-header py-5 mt-n3"><div class="container">
+  <span class="eyebrow">Attribution</span>
+  <h1 class="fw-bold mt-2">Image credits</h1>
+  <p class="text-muted mb-0">Product photographs are sourced from Wikimedia Commons under the licenses listed below.</p>
+</div></section>
+<div class="container py-5">
+  <div class="card"><div class="table-responsive"><table class="table align-middle mb-0">
+    <thead><tr><th>Product</th><th>Original file</th><th>Author</th><th>License</th></tr></thead><tbody>
+    {% for c in items %}<tr><td>{{ c.product }}<div class="sku">{{ c.sku }}</div></td>
+      <td><a href="{{ c.source }}" target="_blank" rel="noopener">{{ c.title|truncatechars:48 }}</a></td>
+      <td class="small">{{ c.author|truncatechars:60 }}</td><td><span class="badge text-bg-light border">{{ c.license }}</span></td></tr>
+    {% endfor %}</tbody></table></div></div>
+</div>
+{% endblock %}

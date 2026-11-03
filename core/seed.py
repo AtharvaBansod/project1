@@ -1,9 +1,13 @@
+from pathlib import Path
+
 from django.conf import settings
 from django.core.files.base import ContentFile
 
 from accounts.models import BuyerProfile, User
 from catalog.models import Brand, Category, Document, Product, Specification
 from core.models import FAQ, TeamMember
+
+SEED_IMAGES = Path(__file__).resolve().parent / "seed_images" / "products"
 
 
 def tiny_pdf(title):
@@ -115,6 +119,9 @@ def run():
             description=f"{summary} Supplied with factory documentation and available with optional installation and training.",
             indicative_price=price, stock_status=stock, stock_qty=qty, lead_time_days=lead, is_featured=feat))
         by_sku[sku] = p
+        photo = SEED_IMAGES / f"{sku}.jpg"
+        if not p.image and photo.exists():
+            p.image.save(photo.name, ContentFile(photo.read_bytes()), save=True)
         if created:
             for n, v in specs:
                 Specification.objects.create(product=p, name=n, value=v)

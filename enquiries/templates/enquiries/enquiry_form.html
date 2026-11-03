@@ -2,6 +2,7 @@
 {% block title %}Enquiry{% endblock %}
 {% block content %}
 <section class="page-header py-4 mt-n3"><div class="container">
+  <span class="eyebrow">Get a quotation</span>
   <h1 class="h3 fw-bold">Enquiry</h1>
   <ul class="nav nav-pills mt-3">
     {% for value, label in types %}<li class="nav-item"><a class="nav-link {% if value == etype %}active{% endif %}" href="?type={{ value }}">{{ label }}</a></li>{% endfor %}

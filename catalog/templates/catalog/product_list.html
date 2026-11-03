@@ -2,6 +2,7 @@
 {% block title %}Products{% endblock %}
 {% block content %}
 <section class="page-header py-4 mt-n3"><div class="container">
+  <span class="eyebrow">Catalog</span>
   <h1 class="h3 fw-bold mb-3">Products</h1>
   <ul class="nav nav-pills">
     <li class="nav-item"><a class="nav-link {% if not kind %}active{% endif %}" href="?{% if brand %}brand={{ brand }}&{% endif %}{% if category %}category={{ category }}&{% endif %}{% if q %}q={{ q|urlencode }}{% endif %}">All</a></li>
