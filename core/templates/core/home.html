@@ -62,10 +62,11 @@
   <div class="mb-4"><span class="eyebrow">Browse by type</span><h2 class="section-title mb-0">Categories</h2></div>
   <div class="row g-3">
     {% for c in categories %}
-    <div class="col-md-6 col-lg-4"><a class="card card-hover cat-tile" href="{% url 'catalog:list' %}?category={{ c.slug }}">
-      <span class="icon-circle"><i class="bi {{ c.icon }}"></i></span>
-      <span><strong>{{ c.name }}</strong><small>{{ c.description }}</small></span>
-      <span class="count">{{ c.total }}</span>
+    <div class="col-md-6 col-lg-4"><a class="card card-hover cat-card" href="{% url 'catalog:list' %}?category={{ c.slug }}">
+      <span class="cat-photo">{% if c.photo %}<img src="{{ c.photo }}" alt="{{ c.name }}" loading="lazy">{% else %}<i class="bi {{ c.icon }}"></i>{% endif %}</span>
+      <span class="cat-body"><span class="icon-circle"><i class="bi {{ c.icon }}"></i></span>
+        <span><strong>{{ c.name }}</strong><small>{{ c.description }}</small></span>
+        <span class="count">{{ c.total }} item{{ c.total|pluralize }}</span></span>
     </a></div>
     {% endfor %}
   </div>
@@ -83,6 +84,19 @@
     </div>
   </div>
 </section>
+
+{% if showcase %}
+<section class="container pb-5">
+  <div class="showcase">
+    {% for p in showcase %}
+    <a class="showcase-item {% if forloop.first %}showcase-main{% endif %}" href="{{ p.get_absolute_url }}">
+      <img src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy">
+      <span class="showcase-cap"><span class="eyebrow">{{ p.brand.name }} &middot; {{ p.category.name }}</span><strong>{{ p.name }}</strong></span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
 
 <section class="band-dark py-5">
   <div class="container py-3">

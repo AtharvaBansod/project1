@@ -12,12 +12,24 @@ from .seed import SEED_IMAGES
 from .models import FAQ, ContactMessage, TeamMember
 
 
+def category_photos(products):
+    photos = {}
+    for p in products.exclude(image="").order_by("kind", "-created_at"):
+        photos.setdefault(p.category_id, p.image.url)
+    return photos
+
+
 def home(request):
     active = Product.objects.filter(is_active=True).select_related("brand", "category")
+    categories = list(Category.objects.annotate(total=Count("products", filter=Q(products__is_active=True))))
+    photos = category_photos(active)
+    for c in categories:
+        c.photo = photos.get(c.id)
     return render(request, "core/home.html", {
-        "featured": active.filter(is_featured=True)[:6],
+        "featured": active.filter(is_featured=True)[:3],
         "latest": active[:4],
-        "categories": Category.objects.annotate(total=Count("products", filter=Q(products__is_active=True))),
+        "categories": categories,
+        "showcase": active.exclude(image="").filter(kind="machine")[:3],
         "machine_count": active.filter(kind="machine").count(),
         "spare_count": active.filter(kind="spare").count(),
         "brands": Brand.objects.all(),
@@ -31,7 +43,8 @@ def about(request):
         ("bi-file-earmark-text", "Receive a quote", "Our team replies with a formal quotation and lead time."),
         ("bi-truck", "Import and install", "We handle import logistics, installation and training."),
     ]
-    return render(request, "core/about.html", {"steps": steps, "team": TeamMember.objects.all()})
+    gallery = Product.objects.filter(is_active=True).exclude(image="").order_by("kind", "name")[:4]
+    return render(request, "core/about.html", {"steps": steps, "team": TeamMember.objects.all(), "gallery": gallery})
 
 
 def contact(request):

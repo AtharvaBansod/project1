@@ -7,11 +7,14 @@
 </div></section>
 <div class="container py-5"><div class="row g-4">
   {% for s in services %}
-  <div class="col-md-6"><div class="card p-4 h-100">
+  <div class="col-md-6"><div class="card product-card h-100 overflow-hidden">
+    {% if s.photo %}<div class="service-photo"><img src="{{ s.photo }}" alt="{{ s.title }}" loading="lazy"><span class="thumb-tag">{{ s.title }}</span></div>{% endif %}
+    <div class="p-4 d-flex flex-column flex-grow-1">
     <div class="d-flex align-items-center gap-3 mb-3"><span class="icon-circle"><i class="bi {{ s.icon }}"></i></span><h2 class="h5 mb-0">{{ s.title }}</h2></div>
     <p class="text-muted">{{ s.text }}</p>
     <ul class="small">{% for p in s.points %}<li>{{ p }}</li>{% endfor %}</ul>
     <a class="btn btn-outline-primary align-self-start mt-auto" href="{% url 'services:request' %}?type={{ s.key }}">Request {{ s.title|lower }}</a>
+    </div>
   </div></div>
   {% endfor %}
 </div>

@@ -17,6 +17,13 @@
       <div class="col"><div class="stat-number">15</div><small class="text-muted">Countries</small></div></div></div></div>
   </div>
 </section>
+{% if gallery %}
+<section class="container pb-5">
+  <div class="row g-3">
+    {% for p in gallery %}<div class="col-6 col-lg-3"><a class="about-photo" href="{{ p.get_absolute_url }}"><img src="{{ p.image.url }}" alt="{{ p.name }}" loading="lazy"><span>{{ p.name }}</span></a></div>{% endfor %}
+  </div>
+</section>
+{% endif %}
 <section class="container pb-5">
   <h2 class="h4 mb-3">How it works</h2>
   <div class="row g-3">

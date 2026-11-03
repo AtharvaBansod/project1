@@ -4,6 +4,7 @@ from django.views.decorators.http import require_POST
 
 from accounts.decorators import role_required
 from accounts.models import User
+from catalog.models import Product
 
 from .forms import ServiceRequestForm, TechnicianUpdateForm
 from .models import ServiceRequest
@@ -24,8 +25,13 @@ SERVICES = [
 ]
 
 
+SERVICE_PHOTOS = {"installation": "HT-VMC850", "maintenance": "KW-GA37", "warranty": "NP-MS500", "training": "SU-TL200"}
+
+
 def service_list(request):
-    return render(request, "services/services.html", {"services": SERVICES})
+    images = {p.sku: p.image.url for p in Product.objects.filter(sku__in=SERVICE_PHOTOS.values()).exclude(image="")}
+    services = [dict(s, photo=images.get(SERVICE_PHOTOS.get(s["key"]))) for s in SERVICES]
+    return render(request, "services/services.html", {"services": services})
 
 
 @role_required(User.Role.BUYER)
